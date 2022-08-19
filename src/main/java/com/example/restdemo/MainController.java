@@ -13,6 +13,7 @@ public class MainController {
 
     @Autowired
     private PersonRepository repository;
+    @Autowired PersonService service;
 
     @GetMapping("/persons")
     public Iterable<Person> getPersons() {
@@ -43,11 +44,7 @@ public class MainController {
 
     @PostMapping("/persons/{id}/messages")
     public Person addMessage(@PathVariable int id, @RequestBody Message message) {
-        Person person = repository.findById(id).get();
-        message.setPerson(person);
-        message.setTime(LocalDateTime.now());
-        person.addMessage(message);
-        return repository.save(person);
+        return service.addMeesageToPerson(id, message);
     }
 
 }
