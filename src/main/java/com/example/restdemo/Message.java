@@ -3,7 +3,10 @@ package com.example.restdemo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,14 +23,17 @@ public class Message {
     public Message() {
     }
 
+    public Message(String title, String text, LocalDateTime time, Person person) {
+        this.title = title;
+        this.text = text;
+        this.person = person;
+        this.time = time;
+    }
+
+
     public Message(String title, String text) {
         this.title = title;
         this.text = text;
-    }
-
-    public Message(int id, String title, String text) {
-        this(title, text);
-        this.id = id;
     }
 
     public int getId() {
@@ -61,4 +67,13 @@ public class Message {
     public void setTime(LocalDateTime time) {
         this.time = time;
     }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
 }

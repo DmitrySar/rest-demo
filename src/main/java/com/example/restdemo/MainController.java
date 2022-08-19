@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
@@ -11,8 +13,6 @@ public class MainController {
 
     @Autowired
     private PersonRepository repository;
-    @Autowired
-    private MessageRepository messageRepository;
 
     @GetMapping("/persons")
     public Iterable<Person> getPersons() {
@@ -42,10 +42,12 @@ public class MainController {
     }
 
     @PostMapping("/persons/{id}/messages")
-    public Optional<Person> addMessage(@PathVariable int id, Message message) {
-        message = messageRepository.save(message);
-        repository.save(repository.findById(id).get().addMessage(message));
-        return findPersonById(id);
+    public Person addMessage(@PathVariable int id, @RequestBody Message message) {
+        Person person = repository.findById(id).get();
+        message.setPerson(person);
+        message.setTime(LocalDateTime.now());
+        person.addMessage(message);
+        return repository.save(person);
     }
 
 }

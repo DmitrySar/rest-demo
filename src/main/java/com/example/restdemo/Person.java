@@ -4,6 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,18 +16,17 @@ public class Person {
     private String surname;
     private String lastname;
     private LocalDate birthday;
-    @OneToMany(cascade = CascadeType.ALL)
-    List<Message> messages;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Message> messages = new ArrayList<>();
 
     public Person() {
     }
 
-    public Person(String firstname, String surname, String lastname, LocalDate birthday, List<Message> messages) {
+    public Person(String firstname, String surname, String lastname, LocalDate birthday) {
         this.firstname = firstname;
         this.surname = surname;
         this.lastname = lastname;
         this.birthday = birthday;
-        this.messages = messages;
     }
 
     public Person(int id, String firstname, String surname, String lastname, LocalDate birthday, List<Message> messages) {
@@ -86,8 +86,7 @@ public class Person {
         this.messages = messages;
     }
 
-    public Person addMessage(Message message) {
+    public void addMessage(Message message) {
         messages.add(message);
-        return this;
     }
 }
